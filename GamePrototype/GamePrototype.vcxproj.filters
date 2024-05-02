@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\MyClasses">
+      <UniqueIdentifier>{4526aa88-3a18-4be3-8cf2-77763d9ca622}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -24,6 +27,21 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Civilian.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="SacrificialPit.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyCultMember.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -31,6 +49,21 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Civilian.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="SacrificialPit.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyCultMember.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Source Files\MyClasses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

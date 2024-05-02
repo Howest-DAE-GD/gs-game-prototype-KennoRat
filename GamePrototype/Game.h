@@ -1,5 +1,15 @@
 #pragma once
+#pragma once
+#include <utils.h>
 #include "BaseGame.h"
+#include "Player.h"
+#include "Civilian.h"
+#include "SacrificialPit.h"
+#include "EnemyCultMember.h"
+#include "Bullet.h"
+
+using namespace utils;
+
 class Game : public BaseGame
 {
 public:
@@ -27,4 +37,21 @@ private:
 	void Initialize();
 	void Cleanup( );
 	void ClearBackground( ) const;
+	void SpawnCivilians();
+	void SpawnEnemyCultMembers(float elapsedSec);
+
+	Player* m_ptrPlayer;
+	std::vector<Civilian*> m_ptrCivilian{};
+	std::vector<EnemyCultMember*> m_ptrEnemyCultMembers{};
+	std::vector<Bullet*> m_ptrBullets{};
+	
+	SacrificialPit* m_ptrPit;
+
+	float m_GameTimer{};
+	float m_SpawnTimerCounter{};
+	const float m_SPAWN_TIMER_MAX{ 4.f };
+	float m_EnemySpawnTimerCounter{};
+	float m_ENEMY_SPAWN_TIMER_MAX{ 3.f };
+	const float m_PEOPLE_WIDTH{20.f};
+	
 };
