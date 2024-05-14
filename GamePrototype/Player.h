@@ -13,6 +13,7 @@ public:
 	void IncrementCultMembers();
 	void DecrementCultMembers();
 	void SacrificeCultMemberTimer();
+	void PlusSpeed();
 
 	void SetSacrificeAvailable(bool Sacrifice);
 	void SetIsDead(bool IsDead);

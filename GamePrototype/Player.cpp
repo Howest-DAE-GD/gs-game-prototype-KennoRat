@@ -59,6 +59,29 @@ void Player::Update(float elapsedSec, bool IsLeft, bool IsDown, bool IsRight , b
 			m_SacrificeCultMemberDelayCounter += elapsedSec;
 			SacrificeCultMemberTimer();
 		}
+
+		float Top{ 700.f };
+		float Bottom{ -3.f };
+		float Left{ 0.f };
+		float Right{ 1250.f };
+
+		if (m_Position.y <= Bottom)
+		{
+			m_Position.y = Bottom;
+		}
+		else if (m_Position.y >= Top)
+		{
+			m_Position.y = Top;
+		}
+
+		if (m_Position.x >= Right)
+		{
+			m_Position.x = Right;
+		}
+		else if (m_Position.x <= Left)
+		{
+			m_Position.x = Left;
+		}
 	}
 }
 
@@ -81,6 +104,11 @@ void Player::SacrificeCultMemberTimer()
 		m_SacrificeCultMemberDelayCounter -= m_SACRIFICE_CULT_MAX;
 		std::cout << "Sacrifice is available" << std::endl;
 	}
+}
+
+void Player::PlusSpeed()
+{
+	m_Speed += 100.f;
 }
 
 void Player::SetSacrificeAvailable(bool Sacrifice)

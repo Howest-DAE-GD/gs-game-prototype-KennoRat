@@ -37,7 +37,7 @@ void Civilian::Draw() const
 	else
 	{
 		SetColor(Color4f{ 0.4f, 1.0f, 4.0f, 1.f });
-		FillRect(m_Person);
+		DrawRect(m_Person);
 	}
 
 }
@@ -106,7 +106,7 @@ void Civilian::MakeNewRandomPosition()
 	{
 		m_IsMoving = true;
 
-		int MoveDistance{ 100 };
+		int MoveDistance{ 200 };
 
 		if(m_IsCultMember)
 		{
@@ -119,6 +119,7 @@ void Civilian::MakeNewRandomPosition()
 			m_NewPosition.y = float(rand() % MoveDistance - MoveDistance / 2) + m_Position.y;
 		}
 		m_NewPositionCounter -= m_NEW_POSITION_DElAY;
+		m_NEW_POSITION_DElAY = rand() % 4 + 3;
 	}
 	
 }
@@ -127,10 +128,10 @@ void Civilian::GoToRandomPosition(float elapsedSec, Player::DirectionPlayer Play
 {
 
 	float DistanceRangePlayer{1.f};
-	float Top{ 715.f };
+	float Top{ 690.f };
 	float Bottom{ -3.f };
 	float Left{ 0.f };
-	float Right{1270.f};
+	float Right{1250.f};
 
 
 	if(m_IsCultMember)

@@ -29,52 +29,52 @@ void SacrificialPit::Draw() const
 		FillEllipse(Points, Radius, Radius);
 	}
 
-	float LineWidth{2.f};
+	float LineWidth{4.f};
 
-	if(m_SacrificedCultMembers >= 25)
+	if(m_SacrificedCultMembers >= 90)
 	{
 		DrawLine(m_PentagonPoints[0], m_PentagonPoints[2], LineWidth);
 	}
 
-	if (m_SacrificedCultMembers >= 30)
+	if (m_SacrificedCultMembers >= 80)
 	{
 		DrawLine(m_PentagonPoints[2], m_PentagonPoints[4], LineWidth);
 	}
 
-	if (m_SacrificedCultMembers >= 35)
+	if (m_SacrificedCultMembers >= 70)
 	{
 		DrawLine(m_PentagonPoints[4], m_PentagonPoints[1], LineWidth);
 	}
 
-	if (m_SacrificedCultMembers >= 40)
+	if (m_SacrificedCultMembers >= 60)
 	{
 		DrawLine(m_PentagonPoints[1], m_PentagonPoints[3], LineWidth);
 	}
 
-	if (m_SacrificedCultMembers >= 45)
+	if (m_SacrificedCultMembers >= 50)
 	{
 		DrawLine(m_PentagonPoints[3], m_PentagonPoints[0], LineWidth);
 	}
 
-	if (m_SacrificedCultMembers >= 20)
+	if (m_SacrificedCultMembers >= 40)
 	{
 		//FillArc(m_Position.x, m_Position.y, m_Width, m_Width, 0.f, 6.3f);
 		float ExtraWidth{ 20.f };
 		DrawEllipse(m_Position, m_Width + ExtraWidth, m_Width + ExtraWidth, 2.f);
 	}
-	else if (m_SacrificedCultMembers >= 15)
+	else if (m_SacrificedCultMembers >= 30)
 	{
 		//FillArc(m_Position.x, m_Position.y, m_Width, m_Width, 0.f, 4.68f);
 		float ExtraWidth{ 15.f };
 		DrawEllipse(m_Position, m_Width + ExtraWidth, m_Width + ExtraWidth, 2.f);
 	}
-	else if(m_SacrificedCultMembers >= 10)
+	else if(m_SacrificedCultMembers >= 20)
 	{
 		//FillArc(m_Position.x, m_Position.y, m_Width, m_Width, 0.f, 3.12f);
 		float ExtraWidth{ 10.f };
 		DrawEllipse(m_Position, m_Width + ExtraWidth, m_Width + ExtraWidth, 2.f);
 	}
-	else if(m_SacrificedCultMembers >= 5)
+	else if(m_SacrificedCultMembers >= 10)
 	{
 		//FillArc(m_Position.x, m_Position.y, m_Width, m_Width, 0.f, 1.56f);
 		float ExtraWidth{ 5.f };
@@ -89,6 +89,11 @@ void SacrificialPit::Update(float elapsedSec)
 void SacrificialPit::IncrementSacrificedCultMembers()
 {
 	++m_SacrificedCultMembers;
+}
+
+int SacrificialPit::GetSacrificedCultMembers()
+{
+	return m_SacrificedCultMembers;
 }
 
 Rectf SacrificialPit::GetSacrificeBox()

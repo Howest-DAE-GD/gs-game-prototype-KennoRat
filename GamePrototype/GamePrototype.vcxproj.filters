@@ -42,6 +42,12 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Upgrades.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -63,6 +69,12 @@
       <Filter>Source Files\MyClasses</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Upgrades.h">
       <Filter>Source Files\MyClasses</Filter>
     </ClInclude>
   </ItemGroup>

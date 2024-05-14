@@ -7,7 +7,7 @@
 class Bullet
 {
 public:
-	Bullet(float width, float height, const Rectf& fieldBoundaries, const Point2f& MousePosition, const Point2f& center);
+	Bullet(float width, float height, const Rectf& fieldBoundaries, const Point2f& MousePosition, const Point2f& center, int AttackDamage);
 
 	void Draw() const;
 	void Update(float elapsedSec, std::vector<EnemyCultMember*>& enemies);
@@ -19,6 +19,7 @@ public:
 private:
 	Point2f m_MousePosition;
 	Point2f m_Center{};
+	int m_Health;
 	float m_Width;
 	float m_Height;
 	Vector2f m_Velocity;

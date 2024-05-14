@@ -5,7 +5,7 @@ using namespace utils;
 class EnemyCultMember
 {
 public:
-	EnemyCultMember(Point2f position, float width);
+	EnemyCultMember(Point2f position, float width, bool IsSpeedy = false, bool IsTanky = false);
 
 	void Draw() const;
 	void Update(float elapsedSec, const Point2f& PlayerPosition);

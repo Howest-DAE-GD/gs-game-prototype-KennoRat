@@ -41,7 +41,7 @@ private:
 	float m_Width;
 
 	float m_NewPositionCounter;
-	float m_NEW_POSITION_DElAY{1.f};
+	float m_NEW_POSITION_DElAY{3.f};
 
 	void MakeNewRandomPosition();
 	void GoToRandomPosition(float elapsedSec, Player::DirectionPlayer PlayerDiretion);

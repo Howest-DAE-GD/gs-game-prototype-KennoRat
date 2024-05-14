@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "EnemyCultMember.h"
 
-EnemyCultMember::EnemyCultMember(Point2f position, float width): m_Position{position}, m_Width(width)
+EnemyCultMember::EnemyCultMember(Point2f position, float width, bool IsSpeedy, bool IsTanky): m_Position{position}, m_Width(width)
 {
 	m_Speed = 50.f;
 	m_Person = Rectf{ m_Position.x, m_Position.y, m_Width, m_Width };
@@ -9,7 +9,16 @@ EnemyCultMember::EnemyCultMember(Point2f position, float width): m_Position{posi
 	m_IsDead = false;
 	m_IsTanky = false;
 
-	int RandomIsAgressive{ rand() % 2};
+	int RandomIsAgressive{};
+	if(IsSpeedy)
+	{
+		RandomIsAgressive = rand() % 2;
+	}
+	else
+	{
+		RandomIsAgressive = 1;
+	}
+
 
 	if(RandomIsAgressive == 0)
 	{
@@ -19,7 +28,17 @@ EnemyCultMember::EnemyCultMember(Point2f position, float width): m_Position{posi
 	{
 		m_IsAgressive = false;
 
-		int RandomIsTanky{ rand() % 2 };
+		int RandomIsTanky{};
+
+		if(IsTanky)
+		{
+			RandomIsTanky = rand() % 2;
+		}
+		else
+		{
+			RandomIsTanky = 1;
+		}
+
 
 		if (RandomIsTanky == 0) m_IsTanky = true;
 		else m_IsTanky = false;
@@ -106,14 +125,15 @@ void EnemyCultMember::GoToNewPosition(float elapsedSec, const Point2f& PlayerPos
 	float Bottom{ -3.f };
 	float Left{ 0.f };
 	float Right{ 1270.f };
+	float AgressiveSpeed{200.f};
 
 	Vector2f BulletDirection{ (PlayerPosition.x - m_Position.x), (PlayerPosition.y - m_Position.y) };
 	m_Velocity = Vector2f{ BulletDirection.x / sqrtf(BulletDirection.x * BulletDirection.x + BulletDirection.y * BulletDirection.y) , BulletDirection.y / sqrtf(BulletDirection.x * BulletDirection.x + BulletDirection.y * BulletDirection.y) };
 
 	if(m_IsAgressive)
 	{
-		m_Position.x += m_Velocity.x * 250.f * elapsedSec;
-		m_Position.y += m_Velocity.y * 250.f * elapsedSec;
+		m_Position.x += m_Velocity.x * AgressiveSpeed * elapsedSec;
+		m_Position.y += m_Velocity.y * AgressiveSpeed * elapsedSec;
 	}
 	else
 	{

@@ -7,6 +7,8 @@
 #include "SacrificialPit.h"
 #include "EnemyCultMember.h"
 #include "Bullet.h"
+#include "Text.h"
+#include "Upgrades.h"
 
 using namespace utils;
 
@@ -39,6 +41,11 @@ private:
 	void ClearBackground( ) const;
 	void SpawnCivilians();
 	void SpawnEnemyCultMembers(float elapsedSec);
+	void BulletDelay(float elapsedSec);
+	void ShootBullet();
+	void GetUpgrades(Rectf player);
+
+	Point2f RandomEnemyPosition();
 
 	Player* m_ptrPlayer;
 	std::vector<Civilian*> m_ptrCivilian{};
@@ -47,11 +54,27 @@ private:
 	
 	SacrificialPit* m_ptrPit;
 
+	std::string m_ShowText{"Feed Me and thou shall receive my power!!!"};
+	Text* m_ptrText;
+
+	Upgrades* m_ptrUpgrade1;
+	Upgrades* m_ptrUpgrade2;
+
+	bool m_AbleToShoot{ false };
+	bool m_IsShooting{ false };
+	bool m_ChooseUpgrades{false};
+	int m_UpgradeAmount{0};
+	int m_BulletDamage{ 1 };
+	int m_PlayerArms{ 1 };
 	float m_GameTimer{};
 	float m_SpawnTimerCounter{};
 	const float m_SPAWN_TIMER_MAX{ 4.f };
 	float m_EnemySpawnTimerCounter{};
 	float m_ENEMY_SPAWN_TIMER_MAX{ 3.f };
 	const float m_PEOPLE_WIDTH{20.f};
+	float m_AbleToShootCounter{0.f};
+	float m_Time_AbleToShoot{0.5f};
+
+	Point2f m_MousePosition{};
 	
 };

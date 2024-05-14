@@ -15,6 +15,7 @@ public:
 	void Update(float elapsedSec);
 
 	void IncrementSacrificedCultMembers();
+	int GetSacrificedCultMembers();
 	Rectf GetSacrificeBox();
 
 private:

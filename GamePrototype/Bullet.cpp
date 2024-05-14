@@ -2,7 +2,7 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(float width, float height, const Rectf& fieldBoundaries, const Point2f& MousePosition, const Point2f& center) : m_Width{ width }, m_Height{ height }, m_FieldBoundaries{fieldBoundaries}, m_MousePosition{MousePosition}, m_Center{center}
+Bullet::Bullet(float width, float height, const Rectf& fieldBoundaries, const Point2f& MousePosition, const Point2f& center, int AttackDamage) : m_Width{ width }, m_Height{ height }, m_FieldBoundaries{fieldBoundaries}, m_MousePosition{MousePosition}, m_Center{center}, m_Health{AttackDamage}
 {
 	Vector2f BulletDirection{ (MousePosition.x - center.x), (MousePosition.y - center.y) };
 	m_Velocity = Vector2f{ BulletDirection.x / sqrtf(BulletDirection.x * BulletDirection.x + BulletDirection.y * BulletDirection.y) , BulletDirection.y / sqrtf(BulletDirection.x * BulletDirection.x + BulletDirection.y * BulletDirection.y) };
@@ -62,7 +62,11 @@ void Bullet::CheckEnemiesHit(std::vector<EnemyCultMember*>& enemies)
 		{
 			if (EnemyIndex->DoHitTest(Bullet))
 			{
-				m_IsActivated = false;
+				--m_Health;
+				if(m_Health <= 0)
+				{
+					m_IsActivated = false;
+				}
 			}
 		}
 	}
