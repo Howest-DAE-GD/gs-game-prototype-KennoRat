@@ -32,12 +32,48 @@ void Game::Initialize( )
 
 	m_ptrUpgrade1 = new Upgrades(Point2f{ GetViewPort().width / 2.f - 300.f, GetViewPort().height / 2.f - 50.f }, 100.f);
 	m_ptrUpgrade2 = new Upgrades(Point2f{ GetViewPort().width / 2.f + 200.f, GetViewPort().height / 2.f - 50.f }, 100.f, m_ptrUpgrade1->GetUpgradeChoice());
+
+	m_ptrUI = new UI(Point2f{ 20.f, GetViewPort().height - 50.f}, 200.f, 50.f);
+
+	m_ptrCamera = new Camera(GetViewPort().width, GetViewPort().height);
+
+	m_DashPressCounter = 0.f;
 }
 
 void Game::Cleanup( )
 {
 	delete m_ptrPlayer;
 	m_ptrPlayer = nullptr;
+	delete m_ptrUpgrade1;
+	m_ptrUpgrade1 = nullptr;
+	delete m_ptrUpgrade2;
+	m_ptrUpgrade2 = nullptr;
+	delete m_ptrUI;
+	m_ptrUI = nullptr;
+	delete m_ptrCamera;
+	m_ptrCamera = nullptr;
+	delete m_ptrPit;
+	m_ptrPit = nullptr;
+	delete m_ptrText;
+	m_ptrText = nullptr;
+
+	for (EnemyCultMember* Enemies : m_ptrEnemyCultMembers)
+	{
+		delete Enemies;
+		Enemies = nullptr;
+	}
+
+	for (Civilian* Civilians : m_ptrCivilian)
+	{
+		delete Civilians;
+		Civilians = nullptr;
+	}
+
+	for (Bullet* bullet : m_ptrBullets)
+	{
+		delete bullet;
+		bullet = nullptr;
+	}
 }
 
 void Game::Update( float elapsedSec )
@@ -61,7 +97,7 @@ void Game::Update( float elapsedSec )
 		{
 			if(Civilians->GetIsDead() == false)
 			{
-				if (IsPointInRect(m_ptrPlayer->GetPosition(), Civilians->GetHitbox()) && Civilians->GetIsCultMemeber() == false)
+				if (utils::IsOverlapping(m_ptrPlayer->GetHitbox(), Civilians->GetHitbox()) && Civilians->GetIsCultMemeber() == false)
 				{
 					Civilians->SetIsCultMember(true);
 					m_ptrPlayer->IncrementCultMembers();
@@ -91,7 +127,7 @@ void Game::Update( float elapsedSec )
 			EnemyCultMember* enemy = m_ptrEnemyCultMembers[Enemyindex];
 			enemy->Update(elapsedSec, m_ptrPlayer->GetPosition());
 
-			if (IsPointInRect(m_ptrPlayer->GetPosition(), enemy->GetHitbox()) && !enemy->GetIsDead()) {
+			if (utils::IsOverlapping(m_ptrPlayer->GetHitbox(), enemy->GetHitbox()) && enemy->GetIsDead() == false) {
 				m_ptrPlayer->SetIsDead(true);
 			}
 
@@ -118,7 +154,14 @@ void Game::Update( float elapsedSec )
 
 		SpawnEnemyCultMembers(elapsedSec);
 
+
 		m_ptrText->Update(elapsedSec);
+		m_ptrUI->Update(elapsedSec, m_ptrPit->GetSacrificedCultMembers(), (m_DashAmount - m_PlayerDashAmount));
+
+		if( m_PlayerDashAmount > 0)
+		{
+			DashCounter(elapsedSec);
+		}
 	}
 
 	BulletDelay(elapsedSec);
@@ -126,17 +169,29 @@ void Game::Update( float elapsedSec )
 	ShootBullet();
 
 	GetUpgrades(m_ptrPlayer->GetHitbox());
+
 	if(m_ptrPit->GetSacrificedCultMembers() >= 90 && m_ptrText->GetGameEnd() == false)
 	{
 		m_ShowText = std::string("MUAHAHA, THE WORLD IS MINE!");
 		m_ptrText->ChangeText(m_ShowText);
 		m_ptrText->SetGameEnd(true);
 	}
+	else if(m_ptrPlayer->GetIsDead() == true)
+	{
+		m_ShowText = std::string("MORTIS");
+		m_ptrText->ChangeText(m_ShowText);
+		m_ptrText->SetGameEnd(true);
+	}
+
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	Rectf dstRectfMap{ -320.f , -180.f , 1600.f ,900.f };
+
+	m_ptrCamera->Aim(dstRectfMap.width, dstRectfMap.height, m_ptrPlayer->GetPosition());
 
 	for (Civilian* Civilians : m_ptrCivilian)
 	{
@@ -157,41 +212,64 @@ void Game::Draw( ) const
 
 	m_ptrPlayer->Draw();
 
+
 	m_ptrText->Draw();
+
 
 	if(m_ChooseUpgrades)
 	{
 		m_ptrUpgrade1->Draw();
 		m_ptrUpgrade2->Draw();
 	}
+
+	//Camera
+	m_ptrCamera->Reset();
+
+	//UI
+	if (m_ptrText->GetIsDone() && m_ptrPlayer->GetIsDead() == false)
+	{
+		m_ptrUI->Draw();
+	}
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+
+	switch (e.keysym.sym)
+	{
+	case SDLK_SPACE:
+		if(m_ptrPlayer->GetIsDashing() == false && m_DashReset && m_PlayerDashAmount < m_DashAmount)
+		{
+			m_ptrPlayer->SetIsDashing(true);
+			m_DashReset = false;
+			m_PlayerDashAmount += 1;
+		}
+		break;
+	case SDLK_u:
+		if (m_CheatUpgrade == false) m_CheatUpgrade = true;
+		break;
+	case SDLK_i:
+		m_CheatEnemies = true;
+		break;
+	}
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch (e.keysym.sym)
+	{
+	case SDLK_SPACE:
+			m_DashReset = true;
+		break;
+	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 {
-	m_MousePosition = Point2f{ float(e.x), float(e.y) };
+	Point2f CameraScreen{ m_ptrCamera->GetBottomLeftPosition() };
+	m_MousePosition = Point2f{ float(e.x + CameraScreen.x), float(e.y + CameraScreen.y) };
 }
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
@@ -257,12 +335,17 @@ void Game::SpawnEnemyCultMembers(float elapsedSec)
 
 	if(m_EnemySpawnTimerCounter >= m_ENEMY_SPAWN_TIMER_MAX)
 	{
-		if(m_GameTimer >= 150.f)
+		if(m_GameTimer >= 150.f || m_CheatEnemies)
 		{
 			m_ptrEnemyCultMembers.push_back(new EnemyCultMember(Point2f(RandomEnemyPosition()), m_PEOPLE_WIDTH, true));
 		}
 
-		if (m_GameTimer >= 60.f)
+		if (m_GameTimer >= 80.f || m_CheatEnemies)
+		{
+			m_ptrEnemyCultMembers.push_back(new EnemyCultMember(Point2f(RandomEnemyPosition()), m_PEOPLE_WIDTH));
+		}
+
+		if (m_GameTimer >= 40.f || m_CheatEnemies)
 		{
 			m_ptrEnemyCultMembers.push_back(new EnemyCultMember(Point2f(RandomEnemyPosition()), m_PEOPLE_WIDTH, false, true));
 		}
@@ -291,6 +374,7 @@ void Game::ShootBullet()
 	{
 		for(int IndexArms{}; IndexArms < m_PlayerArms; ++IndexArms)
 		{
+			Rectf dstRectfMap{ -320.f , -180.f , 1600.f ,900.f };
 			float RandomXposition{};
 			float RandomYPosition{};
 			float ExtraDistance{};
@@ -302,7 +386,8 @@ void Game::ShootBullet()
 				RandomXposition = rand() % 100 + ExtraDistance;
 				RandomYPosition = rand() % 100 + ExtraDistance;
 			}
-			m_ptrBullets.push_back(new Bullet(5.f, 10.f, GetViewPort(), Point2f{ m_MousePosition.x + RandomXposition, m_MousePosition.y + RandomYPosition}, m_ptrPlayer->GetPosition(), m_BulletDamage));
+			//std::cout << "MousePosition X : " << m_MousePosition.x << " MousePosition.Y : " << m_MousePosition.y << std::endl;
+			m_ptrBullets.push_back(new Bullet(5.f, 10.f, dstRectfMap, Point2f{ m_MousePosition.x + RandomXposition, m_MousePosition.y + RandomYPosition}, m_ptrPlayer->GetPosition(), m_BulletDamage));
 		}
 		
 		m_AbleToShoot = false;
@@ -311,9 +396,12 @@ void Game::ShootBullet()
 
 void Game::GetUpgrades(Rectf player)
 {
-	if(m_ptrPit->GetSacrificedCultMembers() >= (10 * m_UpgradeAmount + 5) && m_ChooseUpgrades == false)
+	if((m_ptrPit->GetSacrificedCultMembers() >= (10 * m_UpgradeAmount + 5) || m_CheatUpgrade) && m_ChooseUpgrades == false)
 	{
 		m_ChooseUpgrades = true;
+		if(m_CheatUpgrade) m_CheatUpgrade = false;
+		else ++m_UpgradeAmount;
+
 		m_ptrUpgrade1->NewUpgrades();
 		m_ptrUpgrade2->NewUpgrades(m_ptrUpgrade1->GetUpgradeChoice());
 	}
@@ -325,13 +413,13 @@ void Game::GetUpgrades(Rectf player)
 		if (m_ptrUpgrade1->GetIsPicked() || m_ptrUpgrade2->GetIsPicked())
 		{
 			m_ChooseUpgrades = false;
-			++m_UpgradeAmount;
 			if(m_ptrUpgrade1->GetIsPicked())
 			{
 				if (m_ptrUpgrade1->GetUpgradeChoice() == 0) m_Time_AbleToShoot -= 0.1f;
 				else if (m_ptrUpgrade1->GetUpgradeChoice() == 1) ++m_BulletDamage;
 				else if (m_ptrUpgrade1->GetUpgradeChoice() == 2) m_ptrPlayer->PlusSpeed();
 				else if (m_ptrUpgrade1->GetUpgradeChoice() == 3) ++m_PlayerArms;
+				else if (m_ptrUpgrade1->GetUpgradeChoice() == 4) ++m_DashAmount;
 			}
 			else
 			{
@@ -339,6 +427,7 @@ void Game::GetUpgrades(Rectf player)
 				else if (m_ptrUpgrade2->GetUpgradeChoice() == 1) ++m_BulletDamage;
 				else if (m_ptrUpgrade2->GetUpgradeChoice() == 2) m_ptrPlayer->PlusSpeed();
 				else if (m_ptrUpgrade2->GetUpgradeChoice() == 3) ++m_PlayerArms;
+				else if (m_ptrUpgrade2->GetUpgradeChoice() == 4) ++m_DashAmount;
 			}
 		}
 	}
@@ -353,18 +442,28 @@ Point2f Game::RandomEnemyPosition()
 
 	if (RandomBorder2 == 0)
 	{
-		if (RandomXPosition == 0) RandomXPosition = GetViewPort().left;
-		else RandomXPosition = GetViewPort().width;
+		if (RandomXPosition == 0) RandomXPosition = -320.f;
+		else RandomXPosition = 1600.f;
 
-		RandomYPosition = float(rand() % int(GetViewPort().height));
+		RandomYPosition = float(rand() % int(900.f));
 	}
 	else
 	{
-		if (RandomYPosition == 0) RandomYPosition = GetViewPort().bottom;
-		else RandomYPosition = GetViewPort().height;
+		if (RandomYPosition == 0) RandomYPosition = -180.f;
+		else RandomYPosition = 900.f;
 
-		RandomXPosition = float(rand() % int(GetViewPort().width));
+		RandomXPosition = float(rand() % int(1600.f));
 	}
 
 	return Point2f(RandomXPosition, RandomYPosition);
+}
+
+void Game::DashCounter(float elapsedSec)
+{
+	m_DashPressCounter += elapsedSec;
+	if(m_DashPressCounter >= m_DASH_MAX)
+	{
+		m_DashPressCounter -= m_DASH_MAX;
+		m_PlayerDashAmount -= 1;
+	}
 }

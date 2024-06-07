@@ -1,8 +1,9 @@
 #pragma once
 #include "Vector2f.h"
 #include "utils.h"
-#include "EnemyCultMember.h"
 #include <math.h>
+#include "EnemyCultMember.h"
+
 
 class Bullet
 {

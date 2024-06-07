@@ -3,38 +3,18 @@
 
 Upgrades::Upgrades(Point2f Position, float Size, int UpgradeDuplicate) : m_Position{ Position }, m_Size{ Size }
 {
-	//do
-	//{
-	//	m_UpgradeChoice = UpgradeType(rand() % 3);
-	//} 
-	//while (m_UpgradeChoice == UpgradeType(UpgradeDuplicate));
-
 	m_IsOn = false;
 	m_IsPicked = false;
 	m_UpgradeBox = Rectf{ m_Position.x, m_Position.y, m_Size, m_Size };
 
-	//std::string m_TextPath{ "NotoSerif-Black.ttf" };
-	//switch (m_UpgradeChoice)
-	//{
-	//case Upgrades::UpgradeType::AttackSpeed:
-	//	m_ptrTextFont = new Texture("AttackSpeed ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
-	//	break;
-	//case Upgrades::UpgradeType::AttackDamage:
-	//	m_ptrTextFont = new Texture("AttackDamage ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
-	//	break;
-	//case Upgrades::UpgradeType::PlayerSpeed:
-	//	m_ptrTextFont = new Texture("PlayerSpeed ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
-	//	break;
-	//case Upgrades::UpgradeType::ExtraArm:
-	//	m_ptrTextFont = new Texture("ExtraArm ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
-	//	break;
-	//case Upgrades::UpgradeType::DemonFriend:
-	//	m_ptrTextFont = new Texture("DemonFriend ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
-	//	break;
-	//default:
-	//	break;
-	//}
+	m_UpgradeChoice = UpgradeType::AttackSpeed;
+	m_ptrTextFont = nullptr;
+}
 
+Upgrades::~Upgrades()
+{
+	delete m_ptrTextFont;
+	m_ptrTextFont = nullptr;
 }
 
 Upgrades::Upgrades(Point2f Position, float Size): Upgrades(Position, Size, -1)
@@ -63,7 +43,9 @@ void Upgrades::Draw() const
 		utils::SetColor(Color4f{ 0.4f, 0.5f, 0.5f, 1.f });
 		utils::DrawRect(m_UpgradeBox);
 		break;
-	case Upgrades::UpgradeType::DemonFriend:
+	case Upgrades::UpgradeType::Dash:
+		utils::SetColor(Color4f{ 0.6f, 0.2f, 0.2f, 1.f });
+		utils::DrawRect(m_UpgradeBox);
 		break;
 	}
 
@@ -81,7 +63,7 @@ void Upgrades::NewUpgrades(int UpgradeDuplicate)
 {
 	do
 	{
-		m_UpgradeChoice = UpgradeType(rand() % 4);
+		m_UpgradeChoice = UpgradeType(rand() % 5);
 	} while (m_UpgradeChoice == UpgradeType(UpgradeDuplicate));
 
 	//m_UpgradeChoice = UpgradeType(3);
@@ -103,8 +85,8 @@ void Upgrades::NewUpgrades(int UpgradeDuplicate)
 	case Upgrades::UpgradeType::ExtraArm:
 		m_ptrTextFont = new Texture("ExtraArm ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
 		break;
-	case Upgrades::UpgradeType::DemonFriend:
-		m_ptrTextFont = new Texture("DemonFriend ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
+	case Upgrades::UpgradeType::Dash:
+		m_ptrTextFont = new Texture("Dash ++", m_TextPath, m_Size, Color4f{ 1.0f, 0.2f, 0.2f, 1.0f });
 		break;
 	default:
 		break;

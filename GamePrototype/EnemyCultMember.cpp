@@ -8,6 +8,7 @@ EnemyCultMember::EnemyCultMember(Point2f position, float width, bool IsSpeedy, b
 	m_IsMoving = false;
 	m_IsDead = false;
 	m_IsTanky = false;
+	m_Height = 0.f;
 
 	int RandomIsAgressive{};
 	if(IsSpeedy)
@@ -23,6 +24,7 @@ EnemyCultMember::EnemyCultMember(Point2f position, float width, bool IsSpeedy, b
 	if(RandomIsAgressive == 0)
 	{
 		m_IsAgressive = true;
+		m_Height = 10.f;
 	}
 	else
 	{
@@ -40,7 +42,11 @@ EnemyCultMember::EnemyCultMember(Point2f position, float width, bool IsSpeedy, b
 		}
 
 
-		if (RandomIsTanky == 0) m_IsTanky = true;
+		if (RandomIsTanky == 0)
+		{
+			m_IsTanky = true;
+			m_Width += 15.f;
+		}
 		else m_IsTanky = false;
 	}
 }
@@ -51,12 +57,13 @@ void EnemyCultMember::Draw() const
 	{
 		if(m_IsAgressive)
 		{
-			SetColor(Color4f{ 0.9f, 0.5f, 0.5f, 1.f });
+			SetColor(Color4f{ 0.6f, 0.5f, 0.5f, 1.f });
 		}
 		else
 		{
 			SetColor(Color4f{ 0.8f, 0.4f, 0.4f, 1.f });
 		}
+
 		if(m_IsTanky)
 		{
 			SetColor(Color4f{ 0.8f, 0.2f, 0.2f, 1.f });
@@ -72,7 +79,7 @@ void EnemyCultMember::Draw() const
 
 void EnemyCultMember::Update(float elapsedSec, const Point2f& PlayerPosition)
 {
-	m_Person = Rectf{ m_Position.x, m_Position.y, m_Width, m_Width };
+	m_Person = Rectf{ m_Position.x, m_Position.y, m_Width, m_Width + m_Height };
 	m_PlayerPosition = PlayerPosition;
 	m_NewPosition = m_PlayerPosition;
 
@@ -137,7 +144,7 @@ void EnemyCultMember::GoToNewPosition(float elapsedSec, const Point2f& PlayerPos
 	}
 	else
 	{
-		if (m_NewPosition.x < m_Position.x + DistanceRange && m_NewPosition.x > m_Position.x - DistanceRange) m_NewPosition.x = m_Position.x;
+	/*	if (m_NewPosition.x < m_Position.x + DistanceRange && m_NewPosition.x > m_Position.x - DistanceRange) m_NewPosition.x = m_Position.x;
 		else if (m_NewPosition.x > m_Position.x) m_Position.x += m_Speed * elapsedSec;
 		else if (m_NewPosition.x < m_Position.x) m_Position.x -= m_Speed * elapsedSec;
 
@@ -149,7 +156,10 @@ void EnemyCultMember::GoToNewPosition(float elapsedSec, const Point2f& PlayerPos
 		if (m_NewPosition.x == m_Position.x && m_NewPosition.y == m_Position.y)
 		{
 			m_IsMoving = false;
-		}
+		}*/
+
+		m_Position.x += m_Velocity.x * m_Speed * elapsedSec;
+		m_Position.y += m_Velocity.y * m_Speed * elapsedSec;
 	}
 
 

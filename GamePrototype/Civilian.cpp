@@ -128,10 +128,10 @@ void Civilian::GoToRandomPosition(float elapsedSec, Player::DirectionPlayer Play
 {
 
 	float DistanceRangePlayer{1.f};
-	float Top{ 690.f };
-	float Bottom{ -3.f };
-	float Left{ 0.f };
-	float Right{1250.f};
+	float Top{ 860.f };
+	float Bottom{ -160.f };
+	float Left{ -300.f };
+	float Right{ 1560.f };
 
 
 	if(m_IsCultMember)

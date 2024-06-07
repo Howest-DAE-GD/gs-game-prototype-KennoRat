@@ -30,6 +30,7 @@ private:
 
 	float m_Speed;
 	float m_Width;
+	float m_Height;
 
 	void MakeNewMovePosition();
 	void GoToNewPosition(float elapsedSec, const Point2f& PlayerPosition);

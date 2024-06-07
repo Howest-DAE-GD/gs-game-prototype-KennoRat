@@ -9,6 +9,8 @@
 #include "Bullet.h"
 #include "Text.h"
 #include "Upgrades.h"
+#include "UI.h"
+#include "Camera.h"
 
 using namespace utils;
 
@@ -59,15 +61,24 @@ private:
 
 	Upgrades* m_ptrUpgrade1;
 	Upgrades* m_ptrUpgrade2;
+	UI* m_ptrUI;
+	Camera* m_ptrCamera;
 
 	bool m_AbleToShoot{ false };
 	bool m_IsShooting{ false };
 	bool m_ChooseUpgrades{false};
+	bool m_DashReset{ true };
+	bool m_CheatUpgrade{false};
+	bool m_CheatEnemies{ false };
 	int m_UpgradeAmount{0};
 	int m_BulletDamage{ 1 };
 	int m_PlayerArms{ 1 };
+	int m_PlayerDashAmount{ 0 };
+	int m_DashAmount{ 1 };
 	float m_GameTimer{};
 	float m_SpawnTimerCounter{};
+	float m_DashPressCounter{};
+	float m_DASH_MAX{ 2.f };
 	const float m_SPAWN_TIMER_MAX{ 4.f };
 	float m_EnemySpawnTimerCounter{};
 	float m_ENEMY_SPAWN_TIMER_MAX{ 3.f };
@@ -77,4 +88,5 @@ private:
 
 	Point2f m_MousePosition{};
 	
+	void DashCounter( float elapsedSec );
 };

@@ -48,6 +48,12 @@
     <ClCompile Include="Upgrades.cpp">
       <Filter>Source Files\MyClasses</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -75,6 +81,12 @@
       <Filter>Source Files\MyClasses</Filter>
     </ClInclude>
     <ClInclude Include="Upgrades.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Source Files\MyClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>Source Files\MyClasses</Filter>
     </ClInclude>
   </ItemGroup>

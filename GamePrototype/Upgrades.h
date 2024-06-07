@@ -6,6 +6,7 @@ class Upgrades
 public:
 	Upgrades(Point2f Position, float Size);
 	Upgrades(Point2f Position, float Size, int UpgradeDuplicate);
+	~Upgrades();
 
 	void Draw() const;
 	void Update(Rectf PlayerBox);
@@ -18,7 +19,7 @@ public:
 
 	enum class UpgradeType
 	{
-		AttackSpeed, AttackDamage, PlayerSpeed, ExtraArm, DemonFriend
+		AttackSpeed, AttackDamage, PlayerSpeed, ExtraArm, Dash
 	};
 
 	UpgradeType m_UpgradeChoice;
